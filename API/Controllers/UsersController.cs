@@ -26,7 +26,7 @@ namespace API.Controllers
             // var users = await _userRespository.GetUsersAsync();
 
             // var usersToReturn = _mapper.Map<IEnumerable<MemberDto>>(users);
-            var users = await _userRespository.GetUsersAsync();
+            var users = await _userRespository.GetMemberAsync();
 
             return Ok(users);
         }
