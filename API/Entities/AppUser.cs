@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
-using API.Data;
-using API.Extensions;
+using API.Helpers;
 
 namespace API.Entities
 {
