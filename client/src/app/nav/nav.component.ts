@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, of } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 import { User } from '../_models/user';
+import { UserParams } from '../_models/userParams';
 import { AccountService } from '../_services/account.service';
+import { MembersService } from '../_services/members.service';
 
 @Component({
   selector: 'app-nav',
@@ -12,15 +14,20 @@ import { AccountService } from '../_services/account.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  userParams: UserParams | undefined;
+  user: User | undefined;
 
-  constructor(public accountService: AccountService, private router: Router, private toastr: ToastrService) { }
+  constructor(public accountService: AccountService, private memberService: MembersService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
   }
 
   login() {
     this.accountService.login(this.model).subscribe({
-      next: _ => this.router.navigateByUrl('/members'),
+      next: _ => {
+        this.router.navigateByUrl('/members');
+        this.resetUserParams();
+      },
       error: error => console.log(error)//this.toastr.error(error.error)
     })
   }
@@ -29,5 +36,17 @@ export class NavComponent implements OnInit {
     this.accountService.logout();
     this.router.navigateByUrl('/');
   }
+
+  resetUserParams() {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if (user) {
+          this.userParams = new UserParams(user);
+          this.memberService.setUserParams(this.userParams);
+        }
+      }
+    })
+  }
+
 
 }
