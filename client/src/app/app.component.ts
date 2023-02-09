@@ -13,15 +13,15 @@ export class AppComponent implements OnInit {
   constructor(private accountService: AccountService) {}
 
   ngOnInit(): void {
-    this.setCurrentUser();
+    // this.setCurrentUser();
   }
 
-  setCurrentUser() {
-    // const user: User = JSON.parse(localStorage.getItem('user')!); ! to turn off type safe
-    const userString = localStorage.getItem('user');
-    if(!userString) return;
-    const user: User = JSON.parse(userString);
-    this.accountService.setCurrentUser(user);
-  }
+  // setCurrentUser() {
+  //   // const user: User = JSON.parse(localStorage.getItem('user')!); ! to turn off type safe
+  //   const userString = localStorage.getItem('user');
+  //   if(!userString) return;
+  //   const user: User = JSON.parse(userString);
+  //   this.accountService.setCurrentUser(user);
+  // }
 
 }

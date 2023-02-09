@@ -11,7 +11,12 @@ export class AccountService {
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const userString = localStorage.getItem('user');
+    if(!userString) return;
+    const user: User = JSON.parse(userString);
+    this.setCurrentUser(user);
+  }
 
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
@@ -42,5 +47,14 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+  }
+
+  getCurrentUser() {
+    // const user: User = JSON.parse(localStorage.getItem('user')!); ! to turn off type safe
+    const userString = localStorage.getItem('user');
+    if(!userString) return;
+    const user: User = JSON.parse(userString);
+    this.setCurrentUser(user);
+    return user;
   }
 }
