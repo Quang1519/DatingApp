@@ -20,6 +20,7 @@ export class NavComponent implements OnInit {
   constructor(public accountService: AccountService, private memberService: MembersService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.model.password = 'Pa$$w0rd';
   }
 
   login() {

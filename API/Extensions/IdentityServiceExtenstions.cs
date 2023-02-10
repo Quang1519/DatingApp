@@ -3,16 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using API.Data;
+using API.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions
 {
     public static class IdentityServiceExtenstions
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection servies, IConfiguration config)
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            servies.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+            })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddEntityFrameworkStores<DataContext>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -24,7 +35,13 @@ namespace API.Extensions
                 };
             });
 
-            return servies;
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("RequiredAdminRole", policy => policy.RequireRole("Admin"));
+                opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+            });
+
+            return services;
         }
     }
 }
