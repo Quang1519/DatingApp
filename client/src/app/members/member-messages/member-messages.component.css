@@ -1,7 +1,5 @@
 .card {
   border: none;
-  max-height: 700px;
-  overflow: auto;
 }
 
 .chat {
