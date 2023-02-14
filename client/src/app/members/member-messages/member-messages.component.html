@@ -4,7 +4,7 @@
             No messages yet... say hi by using the message box below
         </div>
 
-        <ul #scrollMe style="overflow: scroll; height: 500px;" [scrollTop]="scrollMe.scrollHeight"
+        <ul #scrollMe style="overflow-y: scroll; height: 500px;" [scrollTop]="scrollMe.scrollHeight"
             *ngIf="(messagesService.messageThread$ | async)!.length > 0" class="chat">
             <li *ngFor="let message of (messagesService.messageThread$ | async)">
                 <div>
